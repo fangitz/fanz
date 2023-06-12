@@ -66,9 +66,13 @@ def main():
 
         if (is_grid_movable_down(grid_value) == False and is_grid_movable_up(grid_value) == False and
             is_grid_movable_left(grid_value) == False and is_grid_movable_right(grid_value) == False):
-                messagebox.showinfo(title="2048", message="No Movable Tiles. Game Over!")
-                break
-                # window.destroy()
+            msg = messagebox.askquestion("2048", "No Movable Tiles. Game Over!, Do you want to play again?", icon= 'warning')
+            if msg == "yes":
+                window.destroy()
+                main()
+            elif msg == "no":
+                quit()
+            break
 
         print(grid_value)
         # update the window
@@ -147,14 +151,6 @@ def is_grid_movable_down(grid_value):
                 if grid_value[row+1][col] == 0 or grid_value[row+1][col] == grid_value[row][col]:
                     return True
     return False
-
-#check if the grip is filled
-# def is_grid_full(grid_value):
-#     for row in grid_value:
-#         for value in row:
-#             if value == 0:
-#                 return False  # Grid is not full, an empty tile is found
-#     return True  # Grid is full, all tiles are filled
 
 
 # Function to move the tiles to the left
@@ -277,10 +273,6 @@ def render_grid(canvas, grid_value, grid_rect, grid_label):
                 canvas.itemconfig(grid_label[i][j], text = "")
 
 
-def reset_canvas(canvas, grid_rect, grid_label):
-    canvas.delete("all")
-    draw_bg(canvas, grid_rect, grid_label)
-
 def draw_bg(canvas, grid_rect, grid_label):
     # draw background grid
     color = 'lightgrey'
@@ -309,3 +301,59 @@ def draw_label(canvas, start_x, start_y):
 main()
 tk.mainloop()
 
+'''def move_down(grid): 
+    # another way to implement tile movement. This function iterates over each column of the board from bottom to top.
+    # It checks if the current tile in a row is equal to the tile above it and merges them if they are. 
+    # If a merge occurs, the merged flag is set to True to prevent multiple merges in a single move. 
+    # If the current tile is empty (0), it swaps it with the tile above it. This process is repeated for each column, 
+    # resulting in a downward movement of tiles.
+    for col in range(GRID_SIZE):
+        merged = False
+        for row in range(GRID_SIZE - 1, 0, -1):
+            if grid[row][col] == grid[row-1][col] and not merged:
+                grid[row][col] *= 2
+                grid[row-1][col] = 0
+                merged = True
+            elif grid[row][col] == 0:
+                grid[row][col] = grid[row-1][col]
+                grid[row-1][col] = 0
+'''
+
+#check if the grip is filled
+# def is_grid_full(grid_value):
+#     for row in grid_value:
+#         for value in row:
+#             if value == 0:
+#                 return False  # Grid is not full, an empty tile is found
+#     return True  # Grid is full, all tiles are filled
+
+'''
+def right_is_clear(values):
+    #check every item if there is any rect to the right
+    for i in range(4):
+        for j in range(4):
+            if values[i][j] != 0:
+                return values[i][j]
+            else:
+                return True
+
+def create_tile(canvas, x, y, num):
+    # Create a frame as a container
+    # frame = tk.Frame(canvas, width=RECT_SIZE, height=RECT_SIZE)
+    # # Create a rectangle inside the frame
+    # rect = canvas.create_rectangle(x, y, x+RECT_SIZE, y+RECT_SIZE, fill="grey", outline="", width=0)
+    # # Create a text label inside the frame
+    # label = tk.Label(frame, text=label, fg="white", font=("Arial", 36), anchor="center", bg="grey")
+    # label.pack(fill="both", expand=True)
+    # # Place the frame on the canvas
+    # group = canvas.create_window(x+RECT_SIZE/2, y+RECT_SIZE/2, anchor="center", window=frame)
+    # group = canvas.addtag_withtag("group", rect)
+    # canvas.addtag_withtag("group", label)
+    rect = canvas.create_rectangle(x, y, x+RECT_SIZE, y+RECT_SIZE, fill="grey", outline="", width=0)
+    label = canvas.create_text(x + RECT_SIZE/2, y + RECT_SIZE/2, text=num, fill="white", font=("Arial", 36), anchor="center")
+    return rect, label
+
+def reset_canvas(canvas, grid_rect, grid_label):
+    canvas.delete("all")
+    draw_bg(canvas, grid_rect, grid_label)
+'''
